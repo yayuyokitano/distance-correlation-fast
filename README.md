@@ -1,13 +1,21 @@
 # distance-correlation-fast
 
-Performs distance correlation in around O(n lg(n)) time. 
-Distance correlation is the appropriate method for getting the correlation between two sets of numbers when the correlation may or may not be linear. 
-For more reading about various correlation methods, I recommend https://m-clark.github.io/docs/CorrelationComparison.pdf 
-Traditionally, a limitation of distance correlation has been that it has only been computable in O(n^2) time. 
-However, in recent years O(n lg(n)) algorithms have been found. 
-This library uses the O(n lg(n)) algorithm of Arin Chaudhuri and Wenhao Hu of the SAS institute. 
-Their paper on this algorithm can be accessed here: https://arxiv.org/pdf/1810.11332.pdf 
-However I believe this implementation might be slightly slower for various reasons. It is, however, still far faster than O(n^2) 
+Performs distance correlation in around O(n lg(n)) time.
+
+Distance correlation is the appropriate method for getting the correlation between two sets of numbers when the correlation may or may not be linear.
+
+For more reading about various correlation methods, I recommend https://m-clark.github.io/docs/CorrelationComparison.pdf
+
+Traditionally, a limitation of distance correlation has been that it has only been computable in O(n^2) time.
+
+However, in recent years O(n lg(n)) algorithms have been found.
+
+This library uses the O(n lg(n)) algorithm of Arin Chaudhuri and Wenhao Hu of the SAS institute.
+
+Their paper on this algorithm can be accessed here: https://arxiv.org/pdf/1810.11332.pdf
+
+However I believe this implementation might be slightly slower for various reasons. It is, however, still far faster than O(n^2)
+
 
 To use, simply install with `yarn add distance-correlation-fast` or `npm i distance-correlation-fast`, then use:
 ```ts
@@ -15,9 +23,11 @@ import distanceCorrelation from "distance-correlation-fast";
 console.log(distanceCorrelation(x,y)) //0-1
 ```
 
-As a result of being O(n lg(n)), this library performs far better than `distance-correlation`. 
-Here is a basic benchmark result, though note that it wasn't exactly scientific. The differences are big enough that it is clear though. 
-There are some slight differences to the result, but that is simply because of floating point math. The operations are normally equivalent. 
+As a result of being O(n lg(n)), this library performs far better than `distance-correlation`.
+
+Here is a basic benchmark result, though note that it wasn't exactly scientific. The differences are big enough that it is clear though.
+
+There are some slight differences to the result, but that is simply because of floating point math. The operations are normally equivalent.
 
 | (index) | distance-correlation | distance-correlation-fast | distance-correlation-result | distance-correlation-fast-result |
 |---------|----------------------|---------------------------|-----------------------------|----------------------------------|
