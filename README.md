@@ -2,7 +2,9 @@
 
 Performs distance correlation in around O(n lg(n)) time.
 
-Distance correlation is the appropriate method for getting the correlation between two sets of numbers when the correlation may or may not be linear.
+Distance correlation is a very appropriate method for getting the correlation between two sets of numbers when the correlation may or may not be linear.
+
+Please avoid the Pearson or the Spearman rho for these purposes, use this instead.
 
 For more reading about various correlation methods, I recommend https://m-clark.github.io/docs/CorrelationComparison.pdf
 
