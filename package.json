@@ -1,0 +1,16 @@
+{
+	"name": "distance-correlation-fast",
+	"version": "1.0.0",
+	"description": "Calculates distance correlation in around O(n log(n)) time",
+	"main": "dist/index.js",
+	"repository": "https://github.com/yayuyokitano/distance-correlation-fast",
+	"author": "yayuyokitano",
+	"license": "MIT",
+	"devDependencies": {
+		"distance-correlation": "^1.1.0"
+	},
+	"scripts": {
+		"test": "node dist/test",
+		"start": "node dist/index"
+	}
+}
