@@ -1,6 +1,6 @@
 {
 	"name": "distance-correlation-fast",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Calculates distance correlation in around O(n log(n)) time",
 	"main": "dist/index.js",
 	"repository": "https://github.com/yayuyokitano/distance-correlation-fast",

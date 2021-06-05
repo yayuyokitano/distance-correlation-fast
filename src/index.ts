@@ -24,8 +24,9 @@ function computeCumulativeArray(x:number[]) {
 
 	const n = x.length;
 	let s = new Array<number>(n);
-	for (let i = 0; i < n; i++) {
-		s[i] = (s?.[i - 1] || 0) + x[i];
+	s[0] = x[0];
+	for (let i = 1; i < n; i++) {
+		s[i] = s[i - 1] + x[i];
 	}
 	return s;
 
@@ -34,9 +35,10 @@ function computeCumulativeArray(x:number[]) {
 function computeRowMean(x:number[], s:number[]) {
 
 	const n = x.length;
+	const nless = n - 1;
 	let rowMean = new Array<number>(n);
 	for (let i = 0; i < n; i++) {
-		rowMean[i] = (2*(i + 1) - n)*x[i] + (s[n - 1] - 2*s[i]);
+		rowMean[i] = (2*(i + 1) - n)*x[i] + (s[nless] - 2*s[i]);
 	}
 	return rowMean;
 
@@ -69,18 +71,6 @@ function sum(x:number[]) {
 		sum += x[i];
 	}
 	return sum;
-
-}
-
-function spliceLarge(x:number[], start:number, deleteCount:number, items:number[]) {
-
-	let lim = 65000;
-	for (let i = 0; i < x.length; i += lim) {
-		let count = Math.min(deleteCount - i, lim);
-		x.splice(start + i, count, ...items.slice(i, i + count));
-	}
-
-	return x;
 
 }
 
@@ -133,25 +123,27 @@ export function distanceCovariance(x:number[], y:number[]) {
 	let r = 0;
 	let s = 1;
 
-	while (i < n - 1) {
+	const nless = n - 1;
+
+	while (i < nless) {
 
 		const gap = 2*(i + 1);
-		let k = -1;
+		let k = 0;
 		const csumv = [
-			computeCumulativeArray(reorderByIndex(v[0], idx[r])),
-			computeCumulativeArray(reorderByIndex(v[1], idx[r])),
-			computeCumulativeArray(reorderByIndex(v[2], idx[r]))
+			[0].concat(computeCumulativeArray(reorderByIndex(v[0], idx[r]))),
+			[0].concat(computeCumulativeArray(reorderByIndex(v[1], idx[r]))),
+			[0].concat(computeCumulativeArray(reorderByIndex(v[2], idx[r])))
 		]
-		csumv[0].unshift(0);
-		csumv[1].unshift(0);
-		csumv[2].unshift(0);
 
 		for (let j = 0; j < n; j += gap) {
 
 			let st1 = j;
-			const e1 = Math.min(st1 + i, n - 1);
 			let st2 = j + i + 1;
-			const e2 = Math.min(st2 + i, n - 1);
+
+			const st1i = st1 + i;
+			const st2i = st2 + i;
+			const e1 = st1i <= nless ? st1i : nless;
+			const e2 = st2i <= nless ? st2i : nless;
 
 			
 
@@ -161,10 +153,10 @@ export function distanceCovariance(x:number[], y:number[]) {
 				const idx2 = idx[r][st2];
 
 				if (ySort[idx1] >= ySort[idx2]) {
-					idx[s][k] = idx1;
+					idx[s][k-1] = idx1;
 					st1++;
 				} else {
-					idx[s][k] = idx2;
+					idx[s][k-1] = idx2;
 					st2++;
 
 					iv1[idx2] += e1 - st1 + 1;
@@ -176,13 +168,15 @@ export function distanceCovariance(x:number[], y:number[]) {
 
 			if (st1 <= e1) {
 				const kf = e1 - st1 + 1;
-				idx[s] = spliceLarge(idx[s], k + 1, kf, idx[r].slice(st1, e1 + 1));
-				//idx[s].splice(k + 1, kf, ...idx[r].slice(st1, e1 + 1));
+				for (let l = 0; l < kf; l++) {
+					idx[s][k+l] = idx[r][st1+l];
+				}
 				k += kf;
 			} else if (st2 <= e2) {
 				const kf = e2 - st2 + 1;
-				idx[s] = spliceLarge(idx[s], k + 1, kf, idx[r].slice(st2, e2 + 1));
-				//idx[s].splice(k + 1, kf, ...idx[r].slice(st2, e2 + 1));
+				for (let l = 0; l < kf; l++) {
+					idx[s][k+l] = idx[r][st2+l];
+				}
 				k += kf;
 			}
 		}
@@ -193,7 +187,7 @@ export function distanceCovariance(x:number[], y:number[]) {
 
 	}
 
-	const mx = sx[n - 1]/n;
+	const mx = sx[nless]/n;
 	const my = sum(ySort)/n;
 
 	const covterm = n * computeMeanDiffProduct(xSort,ySort,mx,my);
@@ -203,7 +197,7 @@ export function distanceCovariance(x:number[], y:number[]) {
 	const c3 = computeInnerProduct(iv2, ySort);
 	const c4 = computeInnerProduct(iv3, xSort);
 
-	const d = 4 * ((c1 + c2) - (c3 + c4)) - 2 * covterm;
+	const d = 4 * (c1 + c2 - c3 - c4) - 2 * covterm;
 
 
 	const ySort2 = reorderByIndex(ySort, idx[r].reverse());
