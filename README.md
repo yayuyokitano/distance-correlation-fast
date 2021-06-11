@@ -2,6 +2,10 @@
 
 Performs distance correlation in around O(n lg(n)) time.
 
+This library has a full focus on performance. If your PR does not fix something, and negatively impacts performance, it will be rejected.
+
+Any potential bug fixes or performance improvements are welcomed
+
 Distance correlation is a very appropriate method for getting the correlation between two sets of numbers when the correlation may or may not be linear.
 
 Please avoid the Pearson or the Spearman rho for these purposes, use this instead.
