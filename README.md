@@ -2,7 +2,7 @@
 
 Performs distance correlation in around O(n lg(n)) time.
 
-This library has a full focus on performance. If your PR does not fix something, and negatively impacts performance, it will be rejected.
+This library has a full focus on performance while avoiding native. If your PR does not fix something, and negatively impacts performance, it will be rejected.
 
 Any potential bug fixes or performance improvements are welcomed
 
