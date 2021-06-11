@@ -20,6 +20,18 @@ function assignByIndexOrder(x:number[], order:number[]) {
 
 }
 
+function computeCumulativeZeroArray(x:number[]) {
+
+	const n = x.length;
+	let s = new Array<number>(n+1);
+	s[0] = 0;
+	for (let i = 0; i < n; i++) {
+		s[i+1] = s[i] + x[i];
+	}
+	return s;
+
+}
+
 function computeCumulativeArray(x:number[]) {
 
 	const n = x.length;
@@ -130,10 +142,10 @@ export function distanceCovariance(x:number[], y:number[]) {
 		const gap = 2*(i + 1);
 		let k = 0;
 		const csumv = [
-			[0].concat(computeCumulativeArray(reorderByIndex(v[0], idx[r]))),
-			[0].concat(computeCumulativeArray(reorderByIndex(v[1], idx[r]))),
-			[0].concat(computeCumulativeArray(reorderByIndex(v[2], idx[r])))
-		]
+			computeCumulativeZeroArray(reorderByIndex(v[0], idx[r])),
+			computeCumulativeZeroArray(reorderByIndex(v[1], idx[r])),
+			computeCumulativeZeroArray(reorderByIndex(v[2], idx[r]))
+		];
 
 		for (let j = 0; j < n; j += gap) {
 
